@@ -1,33 +1,15 @@
-import { Component,  signal } from '@angular/core';
-interface Character{
-  id: number;
-  name: string;
-  power: number;
-}
+import { Component,  inject,  signal } from '@angular/core';
+import { CharacterListComponent } from '../../components/dragonball/character-list/character-list.component';
+import { CharacterAddComponent } from '../../components/dragonball/character-add/character-add.component';
+import { Character } from '../../interfaces/character.interface';
+import {DragonballService} from '../../services/dragonball.service';
 @Component({
   selector: 'dragonball-super',
-  imports: [],
+  imports: [CharacterListComponent, CharacterAddComponent],
   templateUrl: './dragonball-super-page.component.html'
 })
 export class DragonballSuperComponent {
-  name = signal("");
-  power= signal(0);
-  character= signal<Character[]>([
-    {id: 1, name: 'Wilson', power:9001},
-    {id: 2, name: 'Ivan', power:8500},
-  ]);
+  
+  public dragonballService = inject(DragonballService);//forma recomendada de usar inyeccion de dependencias en angular
 
-  addCharacter(){
-    if(!this.name() || !this.power() || this.power() <= 0)
-     return;
-
-    const newCharacter: Character={
-      id: this.character().length+1,
-      name:this.name(),
-      power: this.power()
-    };
-    //this.character().push(newCharacter); no recomendado el push en un signal
-
-    this.character.update(list=> [...list, newCharacter]); //forma correcta de agregr un nuevo elemento a un array desde un signal
-  }
 }
